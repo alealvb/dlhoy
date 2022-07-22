@@ -10,7 +10,6 @@ function formatPrice(price: string) {
 }
 
 export const getCronistaDollar = async () => {
-
   const document = parse(await fetch("https://www.cronista.com/seccion/dolar/").then(res => res.text()));
   const dollarNode = document.querySelector(
     ".piece.markets.standard.boxed a[href=\"/MercadosOnline/moneda.html?id=ARSB\"]"
@@ -38,8 +37,14 @@ export const getCronistaDollar = async () => {
 export const scrapCronistaDollar = async (): Promise<void> => {
   try {
     const data = await getCronistaDollar();
-    await prisma.dolarBlue.create({ data });
 
+    const lastDollar = await prisma.dolarBlue.findFirst({ orderBy: { date: "desc" } });
+
+    // Don't create a new dollar record if the last one is the same
+    if (lastDollar?.buyValue?.toNumber() !== data.buyValue.toNumber()
+      && lastDollar?.sellValue?.toNumber() !== data.sellValue.toNumber()) {
+      await prisma.dolarBlue.create({ data });
+    }
   } catch (error) {
     console.error(error);
   }

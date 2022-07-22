@@ -13,7 +13,7 @@ export default function Index() {
   const { dollarBlue } = useLoaderData();
 
   return (
-    <main className="min-h-screen bg-white flex flex-col max-w-7xl mx-auto">
+    <main className="h-full bg-white flex flex-col max-w-7xl mx-auto">
       <header className="mt-20 w-full">
         <h1 className=" title">
           <span className="text-gray-900">Dolar </span>
@@ -27,7 +27,7 @@ export default function Index() {
             Compra
           </h2>
           <div className="mt-4 text-center">
-            {dollarBlue.buyValue}
+            ${dollarBlue.buyValue}
           </div>
         </div>
         <div className="card">
@@ -35,7 +35,7 @@ export default function Index() {
             Venta
           </h2>
           <div className="mt-4 text-center">
-            {dollarBlue.sellValue}
+            ${dollarBlue.sellValue}
           </div>
         </div>
       </section>
