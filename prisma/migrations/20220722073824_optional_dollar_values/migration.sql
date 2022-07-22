@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "DolarBlue" ALTER COLUMN "buyValue" DROP NOT NULL,
+ALTER COLUMN "sellValue" DROP NOT NULL;

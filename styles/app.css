@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Roboto', 'sans-serif';
+}
+
+.title {
+    @apply text-blue-700 text-3xl font-bold  text-center;
+    font-family: 'system-ui', 'sans-serif';
+}
+
+
+.card {
+    @apply col-start-1 col-end-3 py-4 px-8 bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm;
+}
