@@ -41,7 +41,6 @@ RUN npm run build
 FROM base
 
 ENV DATABASE_URL=file:/data/sqlite.db
-ENV PORT="8080"
 ENV NODE_ENV="production"
 
 # add shortcut for connecting to database CLI
