@@ -1,4 +1,17 @@
+import type { LoaderFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { prisma } from "~/db.server";
+
+export const loader: LoaderFunction = async () => {
+  const dollarBlue = await prisma.dolarBlue.findFirst({ orderBy: { date: "desc" } });
+
+  return { dollarBlue };
+};
+
+
 export default function Index() {
+  const { dollarBlue } = useLoaderData();
+
   return (
     <main className="min-h-screen bg-white flex flex-col max-w-7xl mx-auto">
       <header className="mt-20 w-full">
@@ -14,7 +27,7 @@ export default function Index() {
             Compra
           </h2>
           <div className="mt-4 text-center">
-            200
+            {dollarBlue.buyValue}
           </div>
         </div>
         <div className="card">
@@ -22,7 +35,7 @@ export default function Index() {
             Venta
           </h2>
           <div className="mt-4 text-center">
-            200
+            {dollarBlue.sellValue}
           </div>
         </div>
       </section>
