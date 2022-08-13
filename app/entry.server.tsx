@@ -7,7 +7,9 @@ import isbot from "isbot";
 
 import { scraperJob } from "~/scraper/scraperJob";
 
-scraperJob.start();
+if (process.env.STOP_SCRAP !== "true") {
+  scraperJob.start();
+}
 
 const ABORT_DELAY = 5000;
 
@@ -35,7 +37,7 @@ export default function handleRequest(
           resolve(
             new Response(body, {
               status: didError ? 500 : responseStatusCode,
-              headers: responseHeaders,
+              headers: responseHeaders
             })
           );
           pipe(body);
@@ -46,7 +48,7 @@ export default function handleRequest(
         onError(error: unknown) {
           didError = true;
           console.error(error);
-        },
+        }
       }
     );
     setTimeout(abort, ABORT_DELAY);
