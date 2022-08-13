@@ -23,7 +23,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 17
+          node-version: 17.9.1
 
       - name: 📥 Download deps
         uses: borales/actions-yarn@v3.0.0
@@ -47,7 +47,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 17
+          node-version: 17.9.1
 
       - name: 📥 Download deps
         uses: borales/actions-yarn@v3.0.0
