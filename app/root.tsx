@@ -6,7 +6,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration
 } from "@remix-run/react";
 
 import styles from "./styles/app.css";
@@ -20,27 +20,28 @@ export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Dolar Blue",
   viewport: "width=device-width,initial-scale=1",
+  description: "Dolar Blue en argentina, el precio mas reciente de compra y venta."
 });
 
 export async function loader({ request }: LoaderArgs) {
   return json({
-    user: await getUser(request),
+    user: await getUser(request)
   });
 }
 
 export default function App() {
   return (
     <html lang="en" className="h-full">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body className="h-full">
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
+    <head>
+      <Meta />
+      <Links />
+    </head>
+    <body className="h-full">
+    <Outlet />
+    <ScrollRestoration />
+    <Scripts />
+    <LiveReload />
+    </body>
     </html>
   );
 }
