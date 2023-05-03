@@ -10,7 +10,7 @@ function formatPrice(price: string) {
 }
 
 export const getCronistaDollar = async () => {
-  const document = parse(await fetch("https://www.cronista.com/seccion/dolar/").then(res => res.text()));
+  const document = parse(await fetch("https://www.cronista.com/MercadosOnline/moneda.html?id=ARSB").then(res => res.text()));
   const dollarNode = document.querySelector(
     ".piece.markets.standard.boxed a[href=\"/MercadosOnline/moneda.html?id=ARSB\"]"
   )?.parentNode?.parentNode;
