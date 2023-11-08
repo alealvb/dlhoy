@@ -1,8 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '~/server/db';
 
-export default async function handler(request: Request) {
-  
+async function handler() {
   try {
     await db.$queryRaw`SELECT 1`;
     return Response.json({ ok: true })
