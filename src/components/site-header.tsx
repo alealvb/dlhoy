@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
-import { buttonVariants } from "~/components/ui/button";
+// import { buttonVariants } from "~/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 
 export async function SiteHeader() {
