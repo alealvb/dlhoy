@@ -3,7 +3,7 @@ import { PriceCard } from "./_components/price-card";
 
 export default async function Home() {
   const dollarBlue = await api.dollarBlue.getLatest.query();
-  const lastWeek = await api.dollarBlue.getLastWeek.query();
+  const lastWeek = await api.dollarBlue.getLastTwoWeeks.query();
 
   if (!dollarBlue) {
     return null;

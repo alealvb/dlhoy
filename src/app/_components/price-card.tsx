@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CartesianGrid,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -45,9 +46,10 @@ export function PriceCard({ data, title, price }: PriceCardProps) {
                 bottom: 0,
               }}
             >
-              <YAxis />
+              <YAxis domain={["auto", "auto"]} />
               <XAxis dataKey="date" padding={{ left: 20, right: 20 }} />
               <Tooltip labelStyle={{ color: "hsl(var(--primary))" }} />
+              <CartesianGrid strokeDasharray="3 3" />
               <Line
                 type="monotone"
                 strokeWidth={2}
@@ -56,6 +58,7 @@ export function PriceCard({ data, title, price }: PriceCardProps) {
                   r: 6,
                   style: { fill: "hsl(var(--primary))", opacity: 0.25 },
                 }}
+                dot={false}
                 style={{
                   stroke: "hsl(var(--primary))",
                 }}
