@@ -10,21 +10,22 @@ export const dollarBlueRouter = createTRPCRouter({
   }),
 
   getLastTwoWeeks: publicProcedure.query(async ({ ctx }) => {
-    const weekDays = 14;
     const result: DolarBlue[] = await ctx.db.$queryRaw`
       SELECT *
-      FROM "DolarBlue"
-      WHERE date IN (
-        SELECT MAX(date)
+      FROM (
+        SELECT
+          *,
+          ROW_NUMBER() OVER (PARTITION BY DATE(date) ORDER BY date DESC) AS rn
         FROM "DolarBlue"
-        GROUP BY DATE(date)
-      ) AND date >= NOW() - INTERVAL '14 days'
+        WHERE date >= NOW() - INTERVAL '14 days'
+      ) AS subquery
+      WHERE rn = 1
       ORDER BY date DESC
     `;
 
     result.reverse();
 
-    const days = Array.from({ length: weekDays }, (_, i) =>
+    const days = Array.from({ length: 14 }, (_, i) =>
       subDays(new Date(), i + 1),
     ).reverse();
 
