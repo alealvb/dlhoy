@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  type TooltipProps,
-} from "recharts";
+import type { TooltipProps } from "recharts";
 import type {
   ValueType,
   NameType,
@@ -43,9 +35,12 @@ const CustomTooltip = ({
   </Card>
 );
 
-export function ChartCard({ data }: ChartCardProps) {
+export async function ChartCard({ data }: ChartCardProps) {
+  const { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } =
+    await import("recharts");
+
   return (
-    <Card className="invisible sm:visible">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="font-normal">Ultimas dos semanas</CardTitle>
       </CardHeader>
