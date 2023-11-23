@@ -1,9 +1,10 @@
 import { api } from "~/trpc/server";
 import { PriceCard } from "./_components/price-card";
+import { ChartCard } from "./_components/chart-card";
 
 export default async function Home() {
   const dollarBlue = await api.dollarBlue.getLatest.query();
-  const lastWeek = await api.dollarBlue.getLastTwoWeeks.query();
+  const lastWeek = await api.dollarBlue.getLastByDays.query({ days: 14 });
 
   if (!dollarBlue) {
     return null;
@@ -15,21 +16,17 @@ export default async function Home() {
       day: "numeric",
       month: "short",
     }).format(item.date),
-    price: Number(item.buyValue),
+    sellPrice: Number(item.sellValue),
+    buyPrice: Number(item.buyValue),
   }));
 
   return (
     <main className="container grid grid-cols-1 gap-12 px-4 py-16 md:grid-cols-2">
-      <PriceCard
-        data={data}
-        price={Number(dollarBlue.buyValue)}
-        title="Compra"
-      />
-      <PriceCard
-        data={data}
-        price={Number(dollarBlue.sellValue)}
-        title="Venta"
-      />
+      <PriceCard price={Number(dollarBlue.buyValue)} title="Compra" />
+      <PriceCard price={Number(dollarBlue.sellValue)} title="Venta" />
+      <div className="sm:col-span-2">
+        <ChartCard data={data} />
+      </div>
     </main>
   );
 }

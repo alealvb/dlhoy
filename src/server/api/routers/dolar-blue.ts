@@ -1,6 +1,11 @@
 import { Prisma, type DolarBlue } from "@prisma/client";
 import { subDays, isSameDay } from "date-fns";
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+
+const getLastDaysSchema = z.object({
+  days: z.number().min(1).max(30).default(14),
+});
 
 export const dollarBlueRouter = createTRPCRouter({
   getLatest: publicProcedure.query(({ ctx }) => {
@@ -9,9 +14,11 @@ export const dollarBlueRouter = createTRPCRouter({
     });
   }),
 
-  getLastTwoWeeks: publicProcedure.query(async ({ ctx }) => {
-    const numDays = 15;
-    const result = await ctx.db.$queryRaw<DolarBlue[]>`
+  getLastByDays: publicProcedure
+    .input(getLastDaysSchema)
+    .query(async ({ ctx, input }) => {
+      const numDays = input.days + 1;
+      const result = await ctx.db.$queryRaw<DolarBlue[]>`
       SELECT *
       FROM (
         SELECT
@@ -24,26 +31,26 @@ export const dollarBlueRouter = createTRPCRouter({
       ORDER BY date DESC
     `;
 
-    result.reverse();
+      result.reverse();
 
-    const days = Array.from({ length: numDays }, (_, i) =>
-      subDays(new Date(), i + 1),
-    ).reverse();
+      const days = Array.from({ length: numDays }, (_, i) =>
+        subDays(new Date(), i + 1),
+      ).reverse();
 
-    for (let i = 0; i < days.length; i++) {
-      const day = days[i]!;
-      const dollar = result[i];
+      for (let i = 0; i < days.length; i++) {
+        const day = days[i]!;
+        const dollar = result[i];
 
-      if (!dollar || !isSameDay(day, dollar.date)) {
-        result.splice(i, 0, {
-          ...(result[i - 1] ?? result[0]),
-          date: day,
-        } as DolarBlue);
+        if (!dollar || !isSameDay(day, dollar.date)) {
+          result.splice(i, 0, {
+            ...(result[i - 1] ?? result[0]),
+            date: day,
+          } as DolarBlue);
+        }
       }
-    }
 
-    result.shift();
+      result.shift();
 
-    return result;
-  }),
+      return result;
+    }),
 });
