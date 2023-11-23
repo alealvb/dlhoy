@@ -1,4 +1,4 @@
-import type { DolarBlue } from "@prisma/client";
+import { Prisma, type DolarBlue } from "@prisma/client";
 import { subDays, isSameDay } from "date-fns";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -10,14 +10,15 @@ export const dollarBlueRouter = createTRPCRouter({
   }),
 
   getLastTwoWeeks: publicProcedure.query(async ({ ctx }) => {
-    const result: DolarBlue[] = await ctx.db.$queryRaw`
+    const numDays = 15;
+    const result = await ctx.db.$queryRaw<DolarBlue[]>`
       SELECT *
       FROM (
         SELECT
           *,
           ROW_NUMBER() OVER (PARTITION BY DATE(date) ORDER BY date DESC) AS rn
         FROM "DolarBlue"
-        WHERE date >= NOW() - INTERVAL '14 days'
+        WHERE date >= NOW() - INTERVAL '${Prisma.sql([`${numDays} days`])}'
       ) AS subquery
       WHERE rn = 1
       ORDER BY date DESC
@@ -25,7 +26,7 @@ export const dollarBlueRouter = createTRPCRouter({
 
     result.reverse();
 
-    const days = Array.from({ length: 14 }, (_, i) =>
+    const days = Array.from({ length: numDays }, (_, i) =>
       subDays(new Date(), i + 1),
     ).reverse();
 
@@ -40,6 +41,8 @@ export const dollarBlueRouter = createTRPCRouter({
         } as DolarBlue);
       }
     }
+
+    result.shift();
 
     return result;
   }),
