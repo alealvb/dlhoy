@@ -7,7 +7,7 @@ import type {
 } from "recharts/types/component/DefaultTooltipContent";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { api } from "~/trpc/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Line,
@@ -18,7 +18,7 @@ import {
   YAxis,
 } from "recharts";
 import { Skeleton } from "~/components/ui/skeleton";
-import { differenceInMinutes } from "date-fns";
+import { useKeyCache } from "~/hooks/useCache";
 
 const CustomTooltip = ({
   payload,
@@ -47,19 +47,12 @@ const oneYearDays = 365;
 
 export function ChartCard() {
   const [days, setDays] = useState(defaultDays);
-  const [currentData, setCurrentData] = useState<
-    Record<PropertyKey, unknown[]>
-  >({});
 
-  const {
-    data: dollarData,
-    isLoading,
-    dataUpdatedAt,
-  } = api.dollarBlue.getLastByDays.useQuery({
+  const { data, isLoading } = api.dollarBlue.getLastByDays.useQuery({
     days,
   });
 
-  const data = dollarData?.map((item) => ({
+  const dollarData = data?.map((item) => ({
     name: "Dolar Blue",
     date: Intl.DateTimeFormat("es-AR", {
       day: "numeric",
@@ -69,30 +62,7 @@ export function ChartCard() {
     buyPrice: Number(item.buyValue),
   }));
 
-  useEffect(() => {
-    if (data?.length) {
-      if (currentData[days]?.length) {
-        const lastDate = new Date(dataUpdatedAt);
-        const currentDate = new Date();
-
-        if (differenceInMinutes(currentDate, lastDate) >= 1) {
-          setCurrentData((cData) => {
-            return {
-              ...cData,
-              [days]: data,
-            };
-          });
-        }
-      } else {
-        setCurrentData((cData) => {
-          return {
-            ...cData,
-            [days]: data,
-          };
-        });
-      }
-    }
-  }, [data, dataUpdatedAt, days]);
+  const currentData = useKeyCache(days, dollarData);
 
   const chartCanLoad = !isLoading && currentData[days]?.length;
 
