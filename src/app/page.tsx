@@ -16,9 +16,9 @@ export default async function Home() {
       <PriceCard price={Number(dollarBlue.buyValue)} title="Compra" />
       <PriceCard price={Number(dollarBlue.sellValue)} title="Venta" />
       <div className="invisible sm:visible sm:col-span-2">
-        <Suspense fallback={<SkeletonChartCard />}>
+        {/* <Suspense fallback={<SkeletonChartCard />}> */}
           <ChartCard />
-        </Suspense>
+        {/* </Suspense> */}
       </div>
     </main>
   );
