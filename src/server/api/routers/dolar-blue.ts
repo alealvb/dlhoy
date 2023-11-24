@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const getLastDaysSchema = z.object({
-  days: z.number().min(1).max(30).default(14),
+  days: z.number().min(1).max(365).default(14),
 });
 
 export const dollarBlueRouter = createTRPCRouter({
