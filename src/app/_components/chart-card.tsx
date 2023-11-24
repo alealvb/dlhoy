@@ -79,7 +79,7 @@ export function ChartCard() {
           setCurrentData((cData) => {
             return {
               ...cData,
-              [data.length]: data,
+              [days]: data,
             };
           });
         }
@@ -87,12 +87,12 @@ export function ChartCard() {
         setCurrentData((cData) => {
           return {
             ...cData,
-            [data.length]: data,
+            [days]: data,
           };
         });
       }
     }
-  }, [data, currentData, dataUpdatedAt, days]);
+  }, [data, dataUpdatedAt, days]);
 
   const chartCanLoad = !isLoading && currentData[days]?.length;
 
